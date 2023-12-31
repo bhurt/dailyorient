@@ -2,23 +2,23 @@
 {-# LANGUAGE QuasiQuotes           #-}
 {-# LANGUAGE TemplateHaskell       #-}
 {-# LANGUAGE TypeFamilies          #-}
+
+-- mkYesodDispatch defines orphan instances.
+{-# OPTIONS_GHC -fno-warn-orphans #-}
+
 module Main(
     main
 ) where
 
+    import           Domain
+    import           Routes
     import           Yesod
-
-    data HelloWorld = HelloWorld
-
-    mkYesod "HelloWorld" [parseRoutes|
-    / HomeR GET
-    |]
-
-    instance Yesod HelloWorld
 
     getHomeR :: Handler Html
     getHomeR = defaultLayout [whamlet|Hello World!|]
 
+    mkYesodDispatch domainName routes
+
     main :: IO ()
-    main = warp 3000 HelloWorld
+    main = warp 3000 Domain
 
