@@ -1,7 +1,7 @@
 {-# LANGUAGE QuasiQuotes           #-}
 {-# LANGUAGE TemplateHaskell       #-}
 
-module Routes (
+module Server.Yesod.Routes (
     domainName,
     routes
 ) where

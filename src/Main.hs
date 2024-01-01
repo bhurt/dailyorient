@@ -1,24 +1,28 @@
-{-# LANGUAGE OverloadedStrings     #-}
-{-# LANGUAGE QuasiQuotes           #-}
-{-# LANGUAGE TemplateHaskell       #-}
-{-# LANGUAGE TypeFamilies          #-}
-
--- mkYesodDispatch defines orphan instances.
-{-# OPTIONS_GHC -fno-warn-orphans #-}
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE QuasiQuotes       #-}
+{-# LANGUAGE TemplateHaskell   #-}
+{-# LANGUAGE TypeFamilies      #-}
 
 module Main(
     main
 ) where
 
     import           Domain
-    import           Routes
-    import           Yesod
-
-    getHomeR :: Handler Html
-    getHomeR = defaultLayout [whamlet|Hello World!|]
-
-    mkYesodDispatch domainName routes
+    import           Network.Wai
+    import           Network.Wai.Handler.Warp
+    import           Server.Servant
+    import           Server.Yesod
 
     main :: IO ()
-    main = warp 3000 Domain
+    main = do
+        domain <- makeDomain
+        ysd <- yesodServer domain
+        svt <- servantServer domain
+        let router :: Application
+            router req resp = do
+                case pathInfo req of
+                    "r" : _ -> svt req resp
+                    _       -> ysd req resp
+        putStrLn "Running server on port 3000."
+        run 3000 router
 
