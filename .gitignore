@@ -24,3 +24,4 @@ cabal.project.local~
 stack.yaml.lock
 *.sw?
 client_session_key.aes
+index.html*
