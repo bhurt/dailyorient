@@ -14,6 +14,9 @@ module Server.Yesod.Routes (
 
     routes :: [ ResourceTree String ]
     routes = [parseRoutes|
-                / HomeR GET
+                /           HomeR       GET
+                /test       TestR       GET
+                /test/time  TestTimeR   GET
+                /greeting   GreetingR   GET
              |]
 

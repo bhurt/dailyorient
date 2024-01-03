@@ -11,7 +11,9 @@ module Server.Yesod (
 ) where
 
     import           Domain
+    import           Server.Yesod.Handler.Greeting
     import           Server.Yesod.Handler.Home
+    import           Server.Yesod.Handler.Test
     import           Server.Yesod.Routes
     import           Yesod
 

@@ -6,8 +6,9 @@ module Server.Yesod.Handler.Home (
     getHomeR
 ) where
 
-    import           Data.Text (Text)
+    import           Data.Text                     (Text)
     import           Domain
+    import qualified Server.Yesod.Handler.Greeting as Greeting
     import           Yesod
 
     getHomeR :: Handler Html
@@ -191,7 +192,7 @@ module Server.Yesod.Handler.Home (
             |]
         [whamlet|
             <div class="column table">
-                ^{greeting}
+                ^{Greeting.greeting}
                 ^{rowBlock todayIs}
                 ^{rowBlock nextLfia}
                 ^{rowBlock nextCleaning}
@@ -202,31 +203,6 @@ module Server.Yesod.Handler.Home (
 
     rowBlock :: Widget -> Widget
     rowBlock inner = [whamlet| <div class="row block"> ^{inner} |]
-
-    greeting :: Widget
-    greeting = do
-        ident :: Text <- newIdent
-        [whamlet|
-            <div class="row greeting" id=#{ident}>
-                Greetings, Earth Being!
-        |]
-        toWidget [julius|
-            function update_greeting(now) {
-                let hours = now.getHours();
-                var greeting = "Good Morning";
-                if (hours < 6) {
-                    greeting = "Good Night";
-                } else if (hours >= 20) {
-                    greeting = "Good Night";
-                } else if (hours >= 17) {
-                    greeting = "Good Evening";
-                } else if (hours >= 12) {
-                    greeting = "Good Afternoon";
-                }
-                setTextById(#{ident}, greeting);
-            }
-            call_hourly(update_greeting);
-        |]
 
     todayIs :: Widget
     todayIs = do

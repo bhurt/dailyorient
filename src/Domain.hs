@@ -9,7 +9,8 @@ module Domain (
     resourcesDomain,
     Widget,
     Handler,
-    Route(..)
+    Route(..),
+    simpleLayout
 ) where
 
     import           Data.Text           (Text)
@@ -46,7 +47,12 @@ module Domain (
                         <meta name="author" content="Brian Hurt">
                         <title>#{pageTitle p}
                         <meta name="description" content="#{description}">
+                        <script
+                            src="https://unpkg.com/htmx.org@1.9.10"
+                            integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"
+                            crossorigin="anonymous">
                         ^{pageHead p}
+
                     <body>
                         $forall (status, msg) <- msgs
                             <p class="message #{status}">#{msg}
@@ -56,3 +62,18 @@ module Domain (
     makeDomain :: IO Domain
     makeDomain = pure Domain
     
+
+    simpleLayout :: Widget -> Handler Html
+    simpleLayout w = do
+        p <- widgetToPageContent w
+        withUrlRenderer [hamlet|
+            $newline never
+            $doctype 5
+            <html>
+                <head>
+                    <meta charset="UTF-8">
+                <body>
+                    ^{pageBody p}
+        |]
+
+
