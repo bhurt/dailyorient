@@ -23,9 +23,9 @@ executable dailyorient
                         , Server.Yesod.Handler.Greeting
                         , Server.Yesod.Handler.Home
                         , Server.Yesod.Handler.Test
+                        , Server.Yesod.Handler.TodayIs
                         , Server.Yesod.Htmx
                         , Server.Yesod.Routes
-
   default-language:    Haskell2010
   build-depends:       base >= 4.7 && < 5
                         , data-default

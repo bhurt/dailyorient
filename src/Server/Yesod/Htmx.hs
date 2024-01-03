@@ -1,11 +1,16 @@
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE OverloadedStrings   #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 
 module Server.Yesod.Htmx (
-    pollArgs
+    pollArgs,
+    delayToHour,
+    getLocalTime
 ) where
 
-    import           Data.Text (Text)
-    import qualified Data.Text as Text
+    import           Control.Monad.IO.Class
+    import           Data.Fixed             (Pico)
+    import           Data.Text              (Text)
+    import qualified Data.Text              as Text
     import           Data.Time
     import           Domain
     import           Yesod
@@ -29,3 +34,28 @@ module Server.Yesod.Htmx (
             ("hx-trigger", Text.pack ("load delay:" ++ show secs ++ "s")),
             ("hx-swap", "outerHTML") ]
 
+    delayToHour :: TimeOfDay -> Int -> NominalDiffTime
+    delayToHour now h =
+        let minutes :: Int
+            minutes = 60
+
+            hours :: Int
+            hours = 60 * minutes
+
+            s1 :: Int
+            s1 = (h * hours)
+                    - (todHour now * hours)
+                    - (todMin now * minutes)
+                    + 1
+
+            s2 :: Pico
+            s2 = (fromIntegral s1) + todSec now
+        in
+        secondsToNominalDiffTime s2
+
+    getLocalTime :: MonadIO m => m LocalTime
+    getLocalTime = liftIO $ do
+        utcNow :: UTCTime <- getCurrentTime
+        tzone  :: TimeZone <- getCurrentTimeZone
+        pure $ utcToLocalTime tzone utcNow
+ 

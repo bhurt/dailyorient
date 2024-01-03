@@ -9,10 +9,13 @@ module Server.Yesod.Handler.Home (
     import           Data.Text                     (Text)
     import           Domain
     import qualified Server.Yesod.Handler.Greeting as Greeting
+    import qualified Server.Yesod.Handler.TodayIs  as TodayIs
+    import           Server.Yesod.Htmx
     import           Yesod
 
     getHomeR :: Handler Html
     getHomeR = defaultLayout $ do
+        now <- getLocalTime
         toWidget
             [lucius|
                 .column {
@@ -192,8 +195,8 @@ module Server.Yesod.Handler.Home (
             |]
         [whamlet|
             <div class="column table">
-                ^{Greeting.greeting}
-                ^{rowBlock todayIs}
+                ^{Greeting.greeting now}
+                ^{rowBlock (TodayIs.todayIs now)}
                 ^{rowBlock nextLfia}
                 ^{rowBlock nextCleaning}
                 ^{rowBlock nextHoliday}
@@ -203,58 +206,6 @@ module Server.Yesod.Handler.Home (
 
     rowBlock :: Widget -> Widget
     rowBlock inner = [whamlet| <div class="row block"> ^{inner} |]
-
-    todayIs :: Widget
-    todayIs = do
-        dateDiv :: Text <- newIdent
-        timeDiv :: Text <- newIdent
-        [whamlet|
-            <div class="column" style="flex-grow: 1;">
-                <div class="row label">Today is
-                <div class="row" id="#{dateDiv}">Some day.
-            <div class="column" style="padding-right: 1em;">
-                <div class="row label">The time is
-                <div class="row" id="#{timeDiv}">Now
-        |]
-        toWidget [julius|
-            function format_date(dt) {
-                let dateString =
-                    dayNames[dt.getDay()]
-                    + ", "
-                    + monthNames[dt.getMonth()]
-                    + " "
-                    + dt.getDate().toString()
-                    + ", "
-                    + dt.getFullYear().toString();
-                return dateString;
-            }
-
-
-            function update_date(now) {
-                setTextById(#{dateDiv}, format_date(now));
-            }
-
-            call_daily(update_date);
-
-            function update_time() {
-                let now = new Date();
-                let hours = now.getHours();
-                let ampm = (hours >= 12)?"PM":"AM";
-                let hour = (hours == 0)?12:((hours > 12)?(hours - 12):hours);
-
-                let timeString =
-                    hour.toString()
-                    + ":"
-                    + now.getMinutes().toString().padStart(2, '0')
-                    + " "
-                    + ampm;
-                setTextById(#{timeDiv}, timeString);
-                let later = add_minutes(now, 1);
-                let delayMillis = later - now + 10;
-                setTimeout(update_time, delayMillis);
-            }
-            update_time();
-        |]
 
     nextLfia :: Widget
     nextLfia = do
