@@ -19,7 +19,6 @@ executable dailyorient
   hs-source-dirs:      src
   main-is:             Main.hs
   other-modules:       Domain
-                        , Server.Servant
                         , Server.Yesod
                         , Server.Yesod.Handler.Greeting
                         , Server.Yesod.Handler.Home
@@ -31,8 +30,6 @@ executable dailyorient
   build-depends:       base >= 4.7 && < 5
                         , data-default
                         , http-types
-                        , servant
-                        , servant-server
                         , text
                         , time
                         , wai

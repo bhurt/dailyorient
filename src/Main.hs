@@ -18,21 +18,13 @@ module Main(
     import           Network.Wai.Middleware.Local
     import           Network.Wai.Middleware.RequestLogger
     import           Network.Wai.Middleware.Timeout
-    import           Server.Servant
     import           Server.Yesod
 
     main :: IO ()
     main = do
         domain <- makeDomain
         ysd <- yesodServer domain
-        svt <- servantServer domain
-        let router :: Application
-            router req resp = do
-                case pathInfo req of
-                    "r" : _ -> svt req resp
-                    _       -> ysd req resp
-
-            myGzipSettings :: GzipSettings
+        let myGzipSettings :: GzipSettings
             myGzipSettings = def {
                                     gzipFiles = GzipCompress
                                 }
@@ -51,5 +43,5 @@ module Main(
                 . logStdoutDev
 
         putStrLn "Running server on port 3000."
-        run 3000 (mware router)
+        run 3000 (mware ysd)
 
