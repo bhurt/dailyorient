@@ -20,10 +20,10 @@ executable dailyorient
   main-is:             Main.hs
   other-modules:       Domain
                         , Server.Yesod
+                        , Server.Yesod.Handler.Cleaning
                         , Server.Yesod.Handler.Greeting
                         , Server.Yesod.Handler.Home
                         , Server.Yesod.Handler.Lfia
-                        , Server.Yesod.Handler.Test
                         , Server.Yesod.Handler.TodayIs
                         , Server.Yesod.Htmx
                         , Server.Yesod.Routes
