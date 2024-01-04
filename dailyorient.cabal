@@ -22,6 +22,7 @@ executable dailyorient
                         , Server.Yesod
                         , Server.Yesod.Handler.Cleaning
                         , Server.Yesod.Handler.Greeting
+                        , Server.Yesod.Handler.Holiday
                         , Server.Yesod.Handler.Home
                         , Server.Yesod.Handler.Lfia
                         , Server.Yesod.Handler.TodayIs
@@ -29,6 +30,7 @@ executable dailyorient
                         , Server.Yesod.Routes
   default-language:    Haskell2010
   build-depends:       base >= 4.7 && < 5
+                        , containers
                         , data-default
                         , http-types
                         , text

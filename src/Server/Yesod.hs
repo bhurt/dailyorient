@@ -13,6 +13,7 @@ module Server.Yesod (
     import           Domain
     import           Server.Yesod.Handler.Cleaning
     import           Server.Yesod.Handler.Greeting
+    import           Server.Yesod.Handler.Holiday
     import           Server.Yesod.Handler.Home
     import           Server.Yesod.Handler.Lfia
     import           Server.Yesod.Handler.TodayIs

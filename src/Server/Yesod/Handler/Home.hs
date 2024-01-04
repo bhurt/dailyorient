@@ -9,6 +9,7 @@ module Server.Yesod.Handler.Home (
     import           Domain
     import qualified Server.Yesod.Handler.Cleaning as Cleaning
     import qualified Server.Yesod.Handler.Greeting as Greeting
+    import qualified Server.Yesod.Handler.Holiday  as Holiday
     import qualified Server.Yesod.Handler.Lfia     as Lfia
     import qualified Server.Yesod.Handler.TodayIs  as TodayIs
     import           Server.Yesod.Htmx
@@ -58,16 +59,13 @@ module Server.Yesod.Handler.Home (
                 ^{rowBlock (TodayIs.todayIs now)}
                 ^{rowBlock (Lfia.lfia now)}
                 ^{rowBlock (Cleaning.nextCleaning now)}
-                ^{rowBlock nextHoliday}
+                ^{rowBlock (Holiday.nextHoliday now)}
                 ^{rowBlock weather}
         |]
 
 
     rowBlock :: Widget -> Widget
     rowBlock inner = [whamlet| <div class="row block"> ^{inner} |]
-
-    nextHoliday :: Widget
-    nextHoliday = mempty
 
     weather :: Widget
     weather = mempty
