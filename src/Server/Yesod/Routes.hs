@@ -20,5 +20,6 @@ module Server.Yesod.Routes (
                 /greeting       GreetingR       GET
                 /todayis/date   TodayIsDateR    GET
                 /todayis/time   TodayIsTimeR    GET
+                /lfia           LfiaR           GET
              |]
 

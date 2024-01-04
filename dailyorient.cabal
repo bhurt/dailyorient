@@ -22,6 +22,7 @@ executable dailyorient
                         , Server.Yesod
                         , Server.Yesod.Handler.Greeting
                         , Server.Yesod.Handler.Home
+                        , Server.Yesod.Handler.Lfia
                         , Server.Yesod.Handler.Test
                         , Server.Yesod.Handler.TodayIs
                         , Server.Yesod.Htmx

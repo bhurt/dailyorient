@@ -9,6 +9,7 @@ module Server.Yesod.Handler.Home (
     import           Data.Text                     (Text)
     import           Domain
     import qualified Server.Yesod.Handler.Greeting as Greeting
+    import qualified Server.Yesod.Handler.Lfia     as Lfia
     import qualified Server.Yesod.Handler.TodayIs  as TodayIs
     import           Server.Yesod.Htmx
     import           Yesod
@@ -197,7 +198,7 @@ module Server.Yesod.Handler.Home (
             <div class="column table">
                 ^{Greeting.greeting now}
                 ^{rowBlock (TodayIs.todayIs now)}
-                ^{rowBlock nextLfia}
+                ^{rowBlock (Lfia.lfia now)}
                 ^{rowBlock nextCleaning}
                 ^{rowBlock nextHoliday}
                 ^{rowBlock weather}
@@ -206,40 +207,6 @@ module Server.Yesod.Handler.Home (
 
     rowBlock :: Widget -> Widget
     rowBlock inner = [whamlet| <div class="row block"> ^{inner} |]
-
-    nextLfia :: Widget
-    nextLfia = do
-        lfiaDiv :: Text <- newIdent
-        [whamlet|
-                <div class="column">
-                    <div class="row label">Next LFIA is
-                    <div class="row" id="#{lfiaDiv}">Eventually
-        |]
-        toWidget [julius|
-            function calc_lfia(dt) {
-                let res = round_month(dt);
-                res.setDate(16);
-                let dow = res.getDay();
-                if (dow == 4) {
-                    return res;
-                } else if (dow > 4) {
-                    res.setDate(27 - dow);
-                } else {
-                    res.setDate(20 - dow);
-                }
-                return res;
-            }
-
-            function update_lfia(now) {
-                var lfia = calc_lfia(now);
-                if (lfia.getDate() < now.getDate()) {
-                    lfia = calc_lfia(add_months(now, 1));
-                }
-                setTextById(#{lfiaDiv}, friendly_date(lfia));
-            }
-
-            call_daily(update_lfia);
-        |]
 
     nextCleaning :: Widget
     nextCleaning = do

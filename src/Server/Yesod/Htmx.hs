@@ -4,7 +4,8 @@
 module Server.Yesod.Htmx (
     pollArgs,
     delayToHour,
-    getLocalTime
+    getLocalTime,
+    friendlyDate
 ) where
 
     import           Control.Monad.IO.Class
@@ -59,3 +60,22 @@ module Server.Yesod.Htmx (
         tzone  :: TimeZone <- getCurrentTimeZone
         pure $ utcToLocalTime tzone utcNow
  
+    friendlyDate :: LocalTime -> Day -> Text
+    friendlyDate now day = go
+        where
+            go :: Text
+            go
+                | today == day = "Today"
+                | numDays == 1 = "Tomorrow"
+                | numDays < 7  = Text.pack ("This " ++ show (dayOfWeek day))
+                | otherwise    = Text.pack $
+                                    formatTime
+                                        defaultTimeLocale
+                                        "%A, %e %B %0Y"
+                                        day
+
+            today :: Day
+            today = localDay now
+
+            numDays :: Integer
+            numDays = diffDays day today
