@@ -12,6 +12,7 @@ module Server.Yesod.Handler.Home (
     import qualified Server.Yesod.Handler.Holiday  as Holiday
     import qualified Server.Yesod.Handler.Lfia     as Lfia
     import qualified Server.Yesod.Handler.TodayIs  as TodayIs
+    import qualified Server.Yesod.Handler.Weather  as Weather
     import           Server.Yesod.Htmx
     import           Yesod
 
@@ -52,6 +53,9 @@ module Server.Yesod.Handler.Home (
                     color: #404040;
                     font-size: 0.6em;
                 }
+                .topspace {
+                    padding-top: 0.5em;
+                }
             |]
         [whamlet|
             <div class="column table">
@@ -60,12 +64,10 @@ module Server.Yesod.Handler.Home (
                 ^{rowBlock (Lfia.lfia now)}
                 ^{rowBlock (Cleaning.nextCleaning now)}
                 ^{rowBlock (Holiday.nextHoliday now)}
-                ^{rowBlock weather}
+                ^{rowBlock Weather.weather}
         |]
 
 
     rowBlock :: Widget -> Widget
     rowBlock inner = [whamlet| <div class="row block"> ^{inner} |]
 
-    weather :: Widget
-    weather = mempty

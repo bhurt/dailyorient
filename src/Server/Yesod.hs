@@ -17,6 +17,7 @@ module Server.Yesod (
     import           Server.Yesod.Handler.Home
     import           Server.Yesod.Handler.Lfia
     import           Server.Yesod.Handler.TodayIs
+    import           Server.Yesod.Handler.Weather
     import           Server.Yesod.Routes
     import           Yesod
 

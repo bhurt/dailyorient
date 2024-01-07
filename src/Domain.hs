@@ -2,6 +2,7 @@
 {-# LANGUAGE QuasiQuotes       #-}
 {-# LANGUAGE TemplateHaskell   #-}
 {-# LANGUAGE TypeFamilies      #-}
+{-# LANGUAGE TypeOperators     #-}
 
 module Domain (
     Domain(..),
@@ -10,14 +11,22 @@ module Domain (
     Widget,
     Handler,
     Route(..),
+    getManager,
     simpleLayout
 ) where
 
     import           Data.Text           (Text)
+    import           Location
+    import           Manager
     import           Server.Yesod.Routes
+    import           Weather
     import           Yesod
 
-    data Domain = Domain
+    data Domain = Domain {
+                    location :: Location,
+                    weatherData :: WeatherData,
+                    manager :: ManagerField
+                  }
 
     mkYesodData domainName routes
 
@@ -60,8 +69,24 @@ module Domain (
             |]
 
     makeDomain :: IO Domain
-    makeDomain = pure Domain
+    makeDomain = do
+        mgr <- startManager
+        loc <- startGetLocation
+        wd  <- startWeatherData loc
+        pure $ Domain {
+                    location = loc,
+                    weatherData = wd,
+                    manager = mgr
+                }
     
+    instance HasLocation Domain where
+        getLocationField = location
+
+    instance HasWeatherDataField Domain where
+        getWeatherDataField = weatherData
+
+    instance HasManager Domain where
+        getManagerField = manager
 
     simpleLayout :: Widget -> Handler Html
     simpleLayout w = do

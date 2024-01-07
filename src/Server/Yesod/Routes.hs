@@ -15,11 +15,12 @@ module Server.Yesod.Routes (
     routes :: [ ResourceTree String ]
     routes = [parseRoutes|
                 /               HomeR           GET
+                /cleaning       CleaningR       GET
                 /greeting       GreetingR       GET
+                /holiday        HolidayR        GET
+                /lfia           LfiaR           GET
                 /todayis/date   TodayIsDateR    GET
                 /todayis/time   TodayIsTimeR    GET
-                /lfia           LfiaR           GET
-                /cleaning       CleaningR       GET
-                /holiday        HolidayR        GET
+                /weather        WeatherR        GET
              |]
 
