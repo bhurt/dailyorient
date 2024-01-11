@@ -1,8 +1,9 @@
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE QuasiQuotes       #-}
-{-# LANGUAGE TemplateHaskell   #-}
-{-# LANGUAGE TypeFamilies      #-}
-{-# LANGUAGE TypeOperators     #-}
+{-# LANGUAGE OverloadedStrings   #-}
+{-# LANGUAGE QuasiQuotes         #-}
+{-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE TemplateHaskell     #-}
+{-# LANGUAGE TypeFamilies        #-}
+{-# LANGUAGE TypeOperators       #-}
 
 module Domain (
     Domain(..),
@@ -88,7 +89,10 @@ module Domain (
     instance HasManager Domain where
         getManagerField = manager
 
-    simpleLayout :: Widget -> Handler Html
+    simpleLayout :: forall site .
+                    Yesod site
+                    => WidgetFor site ()
+                    -> HandlerFor site Html
     simpleLayout w = do
         p <- widgetToPageContent w
         withUrlRenderer [hamlet|
