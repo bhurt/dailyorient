@@ -42,6 +42,6 @@ module Main(
                 . local nonlocalResponse
                 . logStdoutDev
 
-        putStrLn "Running server on port 3000."
-        run 3000 (mware ysd)
+        putStrLn "Running server on port 6789."
+        run 6789 (mware ysd)
 
