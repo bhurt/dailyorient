@@ -39,7 +39,7 @@ module Server.Yesod.Handler.Lfia (
                     t1 :: Day
                     t1 = lfiaForMonth year month
                 in
-                if (t1 > (localDay now))
+                if (t1 >= (localDay now))
                 then t1
                 else
                     let year' :: Year
